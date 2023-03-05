@@ -1,15 +1,17 @@
 package com.example.life;
 
+import java.util.ArrayList;
+
 public final class Colony {
     private int sizeX = 0;
     private int sizeY = 0;
-    private int[] bornRules;
-    private int[] surviveRules;
+    private ArrayList<Integer> bornRules;
+    private ArrayList<Integer> surviveRules;
     private int[] cells1;
     private int[] cells2;
     private boolean cellsSwitcher = false;
 
-    public Colony(int newSizeX, int newSizeY, int[] newBornRules, int[] newSurviveRules) {
+    public Colony(int newSizeX, int newSizeY, ArrayList<Integer> newBornRules, ArrayList<Integer> newSurviveRules) {
         sizeX = newSizeX;
         sizeY = newSizeY;
         bornRules = newBornRules;
@@ -86,20 +88,11 @@ public final class Colony {
         return result;
     }
 
-    static private boolean isInArray(int targetValue, int[] array) {
-        for (int value : array) {
-            if (value == targetValue) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private boolean isOkToBorn(int neighboursAmount) {
-        return isInArray(neighboursAmount, bornRules);
+        return bornRules.contains(neighboursAmount);
     }
 
     private boolean isOkToSurvive(int neighboursAmount) {
-        return isInArray(neighboursAmount, surviveRules);
+        return surviveRules.contains(neighboursAmount);
     }
 }

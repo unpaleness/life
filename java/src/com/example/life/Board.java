@@ -11,20 +11,21 @@ import java.awt.Toolkit;
 
 public final class Board extends JPanel implements ActionListener {
 
-    static private final int TICK_MS = 20;
-    static private final int CELL_SIZE = 2;
+    private int cellSize;
     private final Timer timer;
     private final Colony colony;
 
-    public Board() {
-        colony = new Colony(500, 500, new int[]{3}, new int[]{2, 3});
+    public Board(ArgsParser argsParser) {
+        colony = new Colony(argsParser.getXSize(), argsParser.getYSize(), argsParser.getBornRules(), argsParser.getSurviveRules());
         colony.init();
+
+        cellSize = argsParser.getCellSize();
 
         setBackground(Color.white);
         setFocusable(true);
-        setPreferredSize(new Dimension(colony.getSizeX() * CELL_SIZE, colony.getSizeY() * CELL_SIZE));
+        setPreferredSize(new Dimension(colony.getSizeX() * cellSize, colony.getSizeY() * cellSize));
 
-        timer = new Timer(TICK_MS, this);
+        timer = new Timer(argsParser.getTickMs(), this);
         timer.start();
     }
 
@@ -40,7 +41,7 @@ public final class Board extends JPanel implements ActionListener {
             graphics.setColor(Color.black);
             int xCoord = colony.getXCoordByIndex(i);
             int yCoord = colony.getYCoordByIndex(i);
-            graphics.fillRect(xCoord * CELL_SIZE, yCoord * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+            graphics.fillRect(xCoord * cellSize, yCoord * cellSize, cellSize, cellSize);
         }
 
         Toolkit.getDefaultToolkit().sync();

@@ -4,11 +4,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 public final class Application extends JFrame {
+    public Application(ArgsParser argsParser) {
+        setContentPane(new Board(argsParser));
 
-    public Application() {
-        setContentPane(new Board());
-
-        setResizable(false);
+        setResizable(true);
         pack();
 
         setTitle("Life");
@@ -17,8 +16,12 @@ public final class Application extends JFrame {
     }
 
     public static void main(String[] args) {
+        ArgsParser argsParser = new ArgsParser(args);
+        if (!argsParser.getDidSucceed()) {
+            System.exit(1);
+        }
         EventQueue.invokeLater(() -> {
-            Application ex = new Application();
+            Application ex = new Application(argsParser);
             ex.setVisible(true);
         });
     }
