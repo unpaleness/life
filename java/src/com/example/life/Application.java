@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 
 public final class Application extends JFrame {
     public Application(ConfigParser configParser) {
-        setContentPane(new Board(configParser));
+        setContentPane(new Board(new Colony(configParser.getOptionsColony()), configParser.getOptionsBoard()));
 
         setResizable(true);
         pack();

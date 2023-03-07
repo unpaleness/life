@@ -1,5 +1,7 @@
 package com.example.life;
 
+import com.example.life.options.OptionsBoard;
+
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.Color;
@@ -8,32 +10,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Graphics;
 import java.awt.Toolkit;
-import java.util.ArrayList;
 
 public final class Board extends JPanel implements ActionListener {
 
-    private ArrayList<Color> cellColors;
-    private int cellSize;
+    private OptionsBoard options;
     private final Timer timer;
     private final Colony colony;
 
-    public Board(ConfigParser configParser) {
-        colony = new Colony(configParser.getXSize(), configParser.getYSize(), configParser.getHasBorders(), configParser.getBornRules(), configParser.getSurviveRules(), configParser.getMaxAge());
+    public Board(Colony newColony, OptionsBoard newOptions) {
+        colony = newColony;
         colony.init();
 
-        cellSize = configParser.getCellSize();
+        options = newOptions;
 
-        timer = new Timer(configParser.getTickMs(), this);
+        timer = new Timer(options.tickMs, this);
 
-        cellColors = configParser.getCellColors();
-        if (cellColors.size() < 2) {
-            System.err.println("cellColors.size() < 2: " + cellColors.size());
+        if (options.cellColors.size() < 2) {
+            System.err.println("cellColors.size() < 2: " + options.cellColors.size());
             return;
         }
 
-        setBackground(cellColors.get(0));
+        setBackground(options.cellColors.get(0));
         setFocusable(true);
-        setPreferredSize(new Dimension(colony.getSizeX() * cellSize, colony.getSizeY() * cellSize));
+        setPreferredSize(new Dimension(colony.getSizeX() * options.cellSize, colony.getSizeY() * options.cellSize));
 
         timer.start();
     }
@@ -49,12 +48,12 @@ public final class Board extends JPanel implements ActionListener {
                 continue;
             }
 
-            Color cellColor = cell >= 0 && cell < cellColors.size() ? cellColors.get(cell) : cellColors.get(0);
+            Color cellColor = cell >= 0 && cell < options.cellColors.size() ? options.cellColors.get(cell) : options.cellColors.get(0);
 
             graphics.setColor(cellColor);
             int xCoord = colony.getXCoordByIndex(i);
             int yCoord = colony.getYCoordByIndex(i);
-            graphics.fillRect(xCoord * cellSize, yCoord * cellSize, cellSize, cellSize);
+            graphics.fillRect(xCoord * options.cellSize, yCoord * options.cellSize, options.cellSize, options.cellSize);
         }
 
         Toolkit.getDefaultToolkit().sync();

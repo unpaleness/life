@@ -1,37 +1,25 @@
 package com.example.life;
 
-import com.sun.source.tree.NewArrayTree;
-
-import java.util.ArrayList;
+import com.example.life.options.OptionsColony;
 
 public final class Colony {
-    private int sizeX = 0;
-    private int sizeY = 0;
-    private boolean hasBorders = false;
-    private ArrayList<Integer> bornRules;
-    private ArrayList<Integer> surviveRules;
-    private int maxAge = 1;
+    private OptionsColony options;
     private int[] cells1;
     private int[] cells2;
     private boolean cellsSwitcher = false;
 
-    public Colony(int newSizeX, int newSizeY, boolean newHasBorders, ArrayList<Integer> newBornRules, ArrayList<Integer> newSurviveRules, int newMaxAge) {
-        sizeX = newSizeX;
-        sizeY = newSizeY;
-        hasBorders = newHasBorders;
-        bornRules = newBornRules;
-        surviveRules = newSurviveRules;
-        maxAge = newMaxAge > 0 ? newMaxAge : 1;
-        cells1 = new int[sizeX * sizeY];
-        cells2 = new int[sizeX * sizeY];
+    public Colony(OptionsColony newOptions) {
+        options = newOptions;
+        cells1 = new int[options.sizeX * options.sizeY];
+        cells2 = new int[options.sizeX * options.sizeY];
     }
 
     public int getSizeX() {
-        return sizeX;
+        return options.sizeX;
     }
 
     public int getSizeY() {
-        return sizeY;
+        return options.sizeY;
     }
 
     public int[] getCells() {
@@ -39,15 +27,15 @@ public final class Colony {
     }
 
     public int getMaxAge() {
-        return maxAge;
+        return options.maxAge;
     }
 
     public int getXCoordByIndex(int index) {
-        return index % sizeX;
+        return index % options.sizeX;
     }
 
     public int getYCoordByIndex(int index) {
-        return index / sizeX;
+        return index / options.sizeX;
     }
 
     public void init() {
@@ -67,7 +55,7 @@ public final class Colony {
             boolean isOkToSurviveValue = isOkToSurvive(aliveNeighboursAmount);
             if ((cell == 0 && isOkToBornValue) || (cell == 1 && isOkToSurviveValue)) {
                 newCells[i] = 1;
-            } else if (cell < maxAge && cell >= 1) {
+            } else if (cell < options.maxAge && cell >= 1) {
                 newCells[i] = cell + 1;
             } else {
                 newCells[i] = 0;
@@ -81,11 +69,11 @@ public final class Colony {
     }
 
     private int getIndexByCoords(int xCoord, int yCoord) {
-        return yCoord * sizeX + xCoord;
+        return yCoord * options.sizeX + xCoord;
     }
 
     private boolean areCoordsValid(int xCoord, int yCoord) {
-        return xCoord >= 0 && xCoord < sizeX && yCoord >= 0 && yCoord < sizeY;
+        return xCoord >= 0 && xCoord < options.sizeX && yCoord >= 0 && yCoord < options.sizeY;
     }
 
     private int getAliveNeighboursAmount(int cellIndex) {
@@ -95,9 +83,9 @@ public final class Colony {
         int result = 0;
         int[] cells = getCells();
         for (int i = 0; i < 16; i += 2) {
-            if (!hasBorders) {
-                coords[i] = coords[i] != -1 ? coords[i] != sizeX ? coords[i] : 0 : sizeX - 1;
-                coords[i + 1] = coords[i + 1] != -1 ? coords[i + 1] != sizeY ? coords[i + 1] : 0 : sizeY - 1;
+            if (!options.hasBorders) {
+                coords[i] = coords[i] != -1 ? coords[i] != options.sizeX ? coords[i] : 0 : options.sizeX - 1;
+                coords[i + 1] = coords[i + 1] != -1 ? coords[i + 1] != options.sizeY ? coords[i + 1] : 0 : options.sizeY - 1;
             }
             if (areCoordsValid(coords[i], coords[i + 1])) {
                 result += (cells[getIndexByCoords(coords[i], coords[i + 1])] == 1 ? 1 : 0);
@@ -107,10 +95,10 @@ public final class Colony {
     }
 
     private boolean isOkToBorn(int neighboursAmount) {
-        return bornRules.contains(neighboursAmount);
+        return options.bornRules.contains(neighboursAmount);
     }
 
     private boolean isOkToSurvive(int neighboursAmount) {
-        return surviveRules.contains(neighboursAmount);
+        return options.surviveRules.contains(neighboursAmount);
     }
 }

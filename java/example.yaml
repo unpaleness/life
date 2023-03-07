@@ -1,5 +1,5 @@
-xSize: 100
-ySize: 100
+sizeX: 100
+sizeY: 100
 hasBorders: false
 bornRules: [3]
 surviveRules: [2, 3]
