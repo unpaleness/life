@@ -4,8 +4,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 public final class Application extends JFrame {
-    public Application(ArgsParser argsParser) {
-        setContentPane(new Board(argsParser));
+    public Application(ConfigParser configParser) {
+        setContentPane(new Board(configParser));
 
         setResizable(true);
         pack();
@@ -16,12 +16,17 @@ public final class Application extends JFrame {
     }
 
     public static void main(String[] args) {
-        ArgsParser argsParser = new ArgsParser(args);
-        if (!argsParser.getDidSucceed()) {
+        if (args.length < 1) {
+            System.err.println("Config name is not provided as command line argument");
+            System.exit(1);
+        }
+        ConfigParser configParser = new ConfigParser(args[0]);
+        configParser.parse();
+        if (!configParser.getDidSucceed()) {
             System.exit(1);
         }
         EventQueue.invokeLater(() -> {
-            Application ex = new Application(argsParser);
+            Application ex = new Application(configParser);
             ex.setVisible(true);
         });
     }

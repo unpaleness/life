@@ -1,10 +1,13 @@
 package com.example.life;
 
+import com.sun.source.tree.NewArrayTree;
+
 import java.util.ArrayList;
 
 public final class Colony {
     private int sizeX = 0;
     private int sizeY = 0;
+    private boolean hasBorders = false;
     private ArrayList<Integer> bornRules;
     private ArrayList<Integer> surviveRules;
     private int maxAge = 1;
@@ -12,9 +15,10 @@ public final class Colony {
     private int[] cells2;
     private boolean cellsSwitcher = false;
 
-    public Colony(int newSizeX, int newSizeY, ArrayList<Integer> newBornRules, ArrayList<Integer> newSurviveRules, int newMaxAge) {
+    public Colony(int newSizeX, int newSizeY, boolean newHasBorders, ArrayList<Integer> newBornRules, ArrayList<Integer> newSurviveRules, int newMaxAge) {
         sizeX = newSizeX;
         sizeY = newSizeY;
+        hasBorders = newHasBorders;
         bornRules = newBornRules;
         surviveRules = newSurviveRules;
         maxAge = newMaxAge > 0 ? newMaxAge : 1;
@@ -91,6 +95,10 @@ public final class Colony {
         int result = 0;
         int[] cells = getCells();
         for (int i = 0; i < 16; i += 2) {
+            if (!hasBorders) {
+                coords[i] = coords[i] != -1 ? coords[i] != sizeX ? coords[i] : 0 : sizeX - 1;
+                coords[i + 1] = coords[i + 1] != -1 ? coords[i + 1] != sizeY ? coords[i + 1] : 0 : sizeY - 1;
+            }
             if (areCoordsValid(coords[i], coords[i + 1])) {
                 result += (cells[getIndexByCoords(coords[i], coords[i + 1])] == 1 ? 1 : 0);
             }

@@ -8,27 +8,33 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Graphics;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 
 public final class Board extends JPanel implements ActionListener {
 
-    static private Color COLOR_BACKGROUND = Color.white;
-    static private Color COLOR_FALLBACK = new Color(255, 0, 255);
-    static private Color[] COLORS = new Color[]{Color.black, Color.green, Color.cyan, Color.blue};
+    private ArrayList<Color> cellColors;
     private int cellSize;
     private final Timer timer;
     private final Colony colony;
 
-    public Board(ArgsParser argsParser) {
-        colony = new Colony(argsParser.getXSize(), argsParser.getYSize(), argsParser.getBornRules(), argsParser.getSurviveRules(), argsParser.getMaxAge());
+    public Board(ConfigParser configParser) {
+        colony = new Colony(configParser.getXSize(), configParser.getYSize(), configParser.getHasBorders(), configParser.getBornRules(), configParser.getSurviveRules(), configParser.getMaxAge());
         colony.init();
 
-        cellSize = argsParser.getCellSize();
+        cellSize = configParser.getCellSize();
 
-        setBackground(COLOR_BACKGROUND);
+        timer = new Timer(configParser.getTickMs(), this);
+
+        cellColors = configParser.getCellColors();
+        if (cellColors.size() < 2) {
+            System.err.println("cellColors.size() < 2: " + cellColors.size());
+            return;
+        }
+
+        setBackground(cellColors.get(0));
         setFocusable(true);
         setPreferredSize(new Dimension(colony.getSizeX() * cellSize, colony.getSizeY() * cellSize));
 
-        timer = new Timer(argsParser.getTickMs(), this);
         timer.start();
     }
 
@@ -37,15 +43,13 @@ public final class Board extends JPanel implements ActionListener {
         super.paintComponent(graphics);
 
         int[] cells = colony.getCells();
-        int maxAge = colony.getMaxAge();
         for (int i = 0; i < cells.length; ++i) {
             int cell = cells[i];
             if (cell == 0) {
                 continue;
             }
 
-            float ageRatio = (float) cell / maxAge;
-            Color cellColor = blendColors(COLOR_BACKGROUND, COLOR_FALLBACK, ageRatio);
+            Color cellColor = cell >= 0 && cell < cellColors.size() ? cellColors.get(cell) : cellColors.get(0);
 
             graphics.setColor(cellColor);
             int xCoord = colony.getXCoordByIndex(i);

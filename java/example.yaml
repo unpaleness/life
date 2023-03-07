@@ -1,0 +1,11 @@
+xSize: 100
+ySize: 100
+hasBorders: false
+bornRules: [3]
+surviveRules: [2, 3]
+maxAge: 1
+tickMs: 50
+cellSize: 8
+cellColors:
+  - 0xFFFFFF
+  - 0xFF00FF
