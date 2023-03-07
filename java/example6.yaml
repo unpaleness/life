@@ -1,0 +1,13 @@
+sizeX: 300
+sizeY: 150
+hasBorders: false
+bornRules: [3, 7]
+surviveRules: [3, 4, 5]
+maxAge: 3
+tickMs: 40
+cellSize: 6
+cellColors:
+  - 0xFFFFFF
+  - 0xAADDAA
+  - 0x55BB55
+  - 0x009900

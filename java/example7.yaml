@@ -1,0 +1,31 @@
+sizeX: 150
+sizeY: 150
+hasBorders: false
+bornRules: [1, 3]
+surviveRules: [2]
+maxAge: 21
+tickMs: 10
+cellSize: 6
+cellColors:
+  - 0xFFFFFF
+  - 0x000000
+  - 0x110011
+  - 0x220022
+  - 0x330033
+  - 0x440044
+  - 0x550055
+  - 0x661166
+  - 0x772277
+  - 0x883388
+  - 0x994499
+  - 0xAA55AA
+  - 0xBB66BB
+  - 0xCC77CC
+  - 0xEE88EE
+  - 0xFF99FF
+  - 0xFFAAFF
+  - 0xFFBBFF
+  - 0xFFCCFF
+  - 0xFFDDFF
+  - 0xFFEEFF
+  - 0xFFFFFF
