@@ -7,15 +7,17 @@ public final class Colony {
     private int sizeY = 0;
     private ArrayList<Integer> bornRules;
     private ArrayList<Integer> surviveRules;
+    private int maxAge = 1;
     private int[] cells1;
     private int[] cells2;
     private boolean cellsSwitcher = false;
 
-    public Colony(int newSizeX, int newSizeY, ArrayList<Integer> newBornRules, ArrayList<Integer> newSurviveRules) {
+    public Colony(int newSizeX, int newSizeY, ArrayList<Integer> newBornRules, ArrayList<Integer> newSurviveRules, int newMaxAge) {
         sizeX = newSizeX;
         sizeY = newSizeY;
         bornRules = newBornRules;
         surviveRules = newSurviveRules;
+        maxAge = newMaxAge > 0 ? newMaxAge : 1;
         cells1 = new int[sizeX * sizeY];
         cells2 = new int[sizeX * sizeY];
     }
@@ -30,6 +32,10 @@ public final class Colony {
 
     public int[] getCells() {
         return cellsSwitcher ? cells2 : cells1;
+    }
+
+    public int getMaxAge() {
+        return maxAge;
     }
 
     public int getXCoordByIndex(int index) {
@@ -53,8 +59,12 @@ public final class Colony {
         for (int i = 0; i < oldCells.length; ++i) {
             int aliveNeighboursAmount = getAliveNeighboursAmount(i);
             int cell = oldCells[i];
-            if ((cell == 0 && isOkToBorn(aliveNeighboursAmount)) || (cell == 1 && isOkToSurvive(aliveNeighboursAmount))) {
+            boolean isOkToBornValue = isOkToBorn(aliveNeighboursAmount);
+            boolean isOkToSurviveValue = isOkToSurvive(aliveNeighboursAmount);
+            if ((cell == 0 && isOkToBornValue) || (cell == 1 && isOkToSurviveValue)) {
                 newCells[i] = 1;
+            } else if (cell < maxAge && cell >= 1) {
+                newCells[i] = cell + 1;
             } else {
                 newCells[i] = 0;
             }
@@ -82,7 +92,7 @@ public final class Colony {
         int[] cells = getCells();
         for (int i = 0; i < 16; i += 2) {
             if (areCoordsValid(coords[i], coords[i + 1])) {
-                result += cells[getIndexByCoords(coords[i], coords[i + 1])];
+                result += (cells[getIndexByCoords(coords[i], coords[i + 1])] == 1 ? 1 : 0);
             }
         }
         return result;
