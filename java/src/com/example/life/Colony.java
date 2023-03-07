@@ -38,7 +38,7 @@ public final class Colony {
         return index / options.sizeX;
     }
 
-    public void init() {
+    public void init() { // TODO add start variations
         int[] cells = getCells();
         for (int i = 0; i < cells.length; ++i) {
             cells[i] = Math.random() < 0.5f ? 1 : 0;
@@ -95,10 +95,10 @@ public final class Colony {
     }
 
     private boolean isOkToBorn(int neighboursAmount) {
-        return options.bornRules.contains(neighboursAmount);
+        return options.bornRules.contains(neighboursAmount); // TODO optimize
     }
 
     private boolean isOkToSurvive(int neighboursAmount) {
-        return options.surviveRules.contains(neighboursAmount);
+        return options.surviveRules.contains(neighboursAmount); // TODO optimize
     }
 }
