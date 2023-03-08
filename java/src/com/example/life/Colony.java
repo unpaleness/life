@@ -95,10 +95,10 @@ public final class Colony {
     }
 
     private boolean isOkToBorn(int neighboursAmount) {
-        return options.bornRules.contains(neighboursAmount); // TODO optimize
+        return (options.bornRules & (1 << neighboursAmount)) != 0;
     }
 
     private boolean isOkToSurvive(int neighboursAmount) {
-        return options.surviveRules.contains(neighboursAmount); // TODO optimize
+        return (options.surviveRules & (1 << neighboursAmount)) != 0;
     }
 }

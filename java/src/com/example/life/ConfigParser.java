@@ -46,10 +46,16 @@ public class ConfigParser {
                 optionsColony.hasBorders = (boolean) data.get(HAS_BORDERS);
             }
             if (data.containsKey(BORN_RULES)) {
-                optionsColony.bornRules = (ArrayList<Integer>) data.get(BORN_RULES);
+                optionsColony.bornRules = 0;
+                for (int bornRule : (ArrayList<Integer>) data.get(BORN_RULES)) {
+                    optionsColony.bornRules |= (1 << bornRule);
+                }
             }
             if (data.containsKey(SURVIVE_RULES)) {
-                optionsColony.surviveRules = (ArrayList<Integer>) data.get(SURVIVE_RULES);
+                optionsColony.surviveRules = 0;
+                for (int surviveRule : (ArrayList<Integer>) data.get(SURVIVE_RULES)) {
+                    optionsColony.surviveRules |= (1 << surviveRule);
+                }
             }
             if (data.containsKey(MAX_AGE)) {
                 optionsColony.maxAge = (int) data.get(MAX_AGE);
